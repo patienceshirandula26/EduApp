@@ -142,7 +142,12 @@ fun GameScreen(
                             onClick = {
                                 if (selected == null) {
                                     selected = option
-                                    if (isCorrect) score++
+                                    if (isCorrect) {
+                                        score++
+                                        viewModel.playCorrectSound()
+                                    } else {
+                                        viewModel.playWrongSound()
+                                    }
                                 }
                             },
                             modifier = Modifier.weight(1f).height(64.dp),

@@ -8,6 +8,7 @@ import com.example.eduapp.data.ResultRepository
 import com.example.eduapp.data.ResultRepositoryImpl
 import com.example.eduapp.data.UserPreferences
 import com.example.eduapp.database.AppDatabase
+import com.example.eduapp.helper.SoundPlayer
 import com.example.eduapp.viewmodel.AppViewModel
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -33,8 +34,10 @@ val appModule = module {
 
     single { UserPreferences(androidContext()) }
 
+    single { SoundPlayer(androidContext()) }
+
     single<PuzzleRepository> { PuzzleRepositoryImpl(get()) }
     single<ResultRepository> { ResultRepositoryImpl(get()) }
 
-    viewModel { AppViewModel(get(), get(), get()) }
+    viewModel { AppViewModel(get(), get(), get(), get()) }
 }
