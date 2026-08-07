@@ -42,7 +42,7 @@ fun AppNav(currentContext: Context){
         composable("setting") { SettingScreen(navController) }
         composable("game") { GameScreen(currentContext, navController) }
         composable("score") { ScoreScreen(navController) }
-        composable("testDB") { TestDBScreen(currentContext) }
+        composable("testDB") { TestDBScreen() }
     }
 
 }

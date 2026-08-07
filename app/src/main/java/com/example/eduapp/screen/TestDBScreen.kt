@@ -1,6 +1,5 @@
 package com.example.eduapp.screen
 
-import android.content.Context
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -22,31 +21,21 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.room.Room
-import com.example.eduapp.database.AppDatabase
 import com.example.eduapp.viewmodel.AppViewModel
-import com.example.eduapp.viewmodel.AppViewModelFactory
+import org.koin.androidx.compose.koinViewModel
 
-//test db screen
 @Composable
-fun TestDBScreen(currentContext: Context, modifier: Modifier = Modifier) {
-    //steps to work with DB
-    val db = Room.databaseBuilder(
-        currentContext,
-        AppDatabase::class.java,
-        "app_db"
-    ).build()
-    val factory = AppViewModelFactory(db.appDao())
-    val viewModel: AppViewModel = viewModel(factory = factory)
-    val users by viewModel.users.collectAsStateWithLifecycle(initialValue = emptyList())
-
+fun TestDBScreen(
+    modifier: Modifier = Modifier,
+    viewModel: AppViewModel = koinViewModel()
+) {
+    val users by viewModel.results.collectAsStateWithLifecycle(initialValue = emptyList())
     var name by remember { mutableStateOf("") }
-    Column(
-        modifier
-            .fillMaxSize()
-            .padding(16.dp)
-    ) {
+
+    Column(modifier.fillMaxSize().padding(16.dp)) {
+        Text("Puzzles found in assets: ${viewModel.totalPuzzleCount()}")
+        Spacer(modifier = Modifier.height(8.dp))
+
         OutlinedTextField(
             value = name,
             onValueChange = { name = it },
@@ -58,22 +47,14 @@ fun TestDBScreen(currentContext: Context, modifier: Modifier = Modifier) {
             Button(onClick = {
                 viewModel.addUser(name)
                 name = ""
-            }) {
-                Text("Add User")
-            }
+            }) { Text("Add User") }
             Spacer(modifier = Modifier.width(8.dp))
-            Button(onClick = {
-                viewModel.clearUsers()
-            }) {
-                Text("Clear")
-            }
+            Button(onClick = { viewModel.clearUsers() }) { Text("Clear") }
         }
         Spacer(modifier = Modifier.height(16.dp))
         LazyColumn {
             items(users) { user ->
-                Text(
-                    text = "ID: ${user.id}, ${user.username}, score=${user.score}, level=${user.level}"
-                )
+                Text("ID: ${user.id}, ${user.username}, score=${user.score}, level=${user.level}")
             }
         }
     }
