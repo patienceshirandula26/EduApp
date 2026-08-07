@@ -6,6 +6,7 @@ import com.example.eduapp.data.PuzzleRepository
 import com.example.eduapp.data.PuzzleRepositoryImpl
 import com.example.eduapp.data.ResultRepository
 import com.example.eduapp.data.ResultRepositoryImpl
+import com.example.eduapp.data.UserPreferences
 import com.example.eduapp.database.AppDatabase
 import com.example.eduapp.viewmodel.AppViewModel
 import org.koin.android.ext.koin.androidContext
@@ -30,8 +31,10 @@ val appModule = module {
 
     single { PuzzleCatalog(androidContext().assets) }
 
+    single { UserPreferences(androidContext()) }
+
     single<PuzzleRepository> { PuzzleRepositoryImpl(get()) }
     single<ResultRepository> { ResultRepositoryImpl(get()) }
 
-    viewModel { AppViewModel(get(), get()) }
+    viewModel { AppViewModel(get(), get(), get()) }
 }

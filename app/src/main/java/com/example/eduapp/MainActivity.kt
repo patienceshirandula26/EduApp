@@ -9,7 +9,9 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -18,7 +20,10 @@ import com.example.eduapp.screen.LandingScreen
 import com.example.eduapp.screen.ScoreScreen
 import com.example.eduapp.screen.SettingScreen
 import com.example.eduapp.screen.TestDBScreen
+import com.example.eduapp.screen.WelcomeScreen
 import com.example.eduapp.ui.theme.EduAppTheme
+import com.example.eduapp.viewmodel.AppViewModel
+import org.koin.androidx.compose.koinViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,19 +37,24 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
+
 @Composable
-fun AppNav(currentContext: Context){
-    //obtain navController
+fun AppNav(currentContext: Context) {
     val navController = rememberNavController()
-    //set navHost and the routes
-    NavHost(navController = navController, startDestination = "landing") {
+    val viewModel: AppViewModel = koinViewModel()
+    val settings by viewModel.settings.collectAsStateWithLifecycle()
+
+    NavHost(
+        navController = navController,
+        startDestination = if (settings.hasUsername) "landing" else "welcome"
+    ) {
+        composable("welcome") { WelcomeScreen(navController) }
         composable("landing") { LandingScreen(navController) }
         composable("setting") { SettingScreen(navController) }
         composable("game") { GameScreen(currentContext, navController) }
         composable("score") { ScoreScreen(navController) }
         composable("testDB") { TestDBScreen() }
     }
-
 }
 
 @Preview(showBackground = true)
