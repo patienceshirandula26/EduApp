@@ -36,6 +36,10 @@ class AppViewModel(
     fun resultsFor(username: String): Flow<List<QuizResult>> =
         resultRepository.resultsFor(username)
 
+    fun quizzesPlayed(username: String): Flow<Int> = resultRepository.quizzesPlayed(username)
+
+    fun totalCorrect(username: String): Flow<Int> = resultRepository.totalCorrect(username)
+
     fun saveResult(result: QuizResult) {
         viewModelScope.launch { resultRepository.saveResult(result) }
     }
