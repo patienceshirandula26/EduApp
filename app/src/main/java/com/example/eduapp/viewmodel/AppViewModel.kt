@@ -47,6 +47,22 @@ class AppViewModel(
 
     fun totalCorrect(username: String): Flow<Int> = resultRepository.totalCorrect(username)
 
+    fun saveQuizResult(level: Int, correct: Int, total: Int, durationSeconds: Int) {
+        val name = settings.value.username
+        if (name.isBlank()) return
+        viewModelScope.launch {
+            resultRepository.saveResult(
+                QuizResult(
+                    username = name,
+                    level = level,
+                    correct = correct,
+                    total = total,
+                    durationSeconds = durationSeconds
+                )
+            )
+        }
+    }
+
     fun saveResult(result: QuizResult) {
         viewModelScope.launch { resultRepository.saveResult(result) }
     }

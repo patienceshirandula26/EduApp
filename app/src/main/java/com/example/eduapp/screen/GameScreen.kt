@@ -60,6 +60,7 @@ fun GameScreen(
     var index by remember { mutableIntStateOf(0) }
     var score by remember { mutableIntStateOf(0) }
     var selected by remember { mutableStateOf<Int?>(null) }
+    val startedAt = remember(level) { System.currentTimeMillis() }
 
     if (puzzles.isEmpty()) {
         Text("No puzzles found for level $level")
@@ -169,6 +170,8 @@ fun GameScreen(
                             index++
                             selected = null
                         } else {
+                            val seconds = ((System.currentTimeMillis() - startedAt) / 1000).toInt()
+                            viewModel.saveQuizResult(level, score, puzzles.size, seconds)
                             navController.navigate("score/$level/$score/${puzzles.size}")
                         }
                     },
