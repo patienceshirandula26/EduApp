@@ -12,11 +12,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.eduapp.screen.GameScreen
 import com.example.eduapp.screen.LandingScreen
+import com.example.eduapp.screen.LevelScreen
 import com.example.eduapp.screen.ScoreScreen
 import com.example.eduapp.screen.SettingScreen
 import com.example.eduapp.screen.TestDBScreen
@@ -51,7 +54,14 @@ fun AppNav(currentContext: Context) {
         composable("welcome") { WelcomeScreen(navController) }
         composable("landing") { LandingScreen(navController) }
         composable("setting") { SettingScreen(navController) }
-        composable("game") { GameScreen(currentContext, navController) }
+        composable("levels") { LevelScreen(navController) }
+        composable(
+            route = "game/{level}",
+            arguments = listOf(navArgument("level") { type = NavType.IntType })
+        ) { backStackEntry ->
+            val level = backStackEntry.arguments?.getInt("level") ?: 1
+            GameScreen(currentContext, navController, level)
+        }
         composable("score") { ScoreScreen(navController) }
         composable("testDB") { TestDBScreen() }
     }

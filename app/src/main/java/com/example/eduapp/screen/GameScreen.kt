@@ -23,22 +23,26 @@ import androidx.navigation.NavHostController
 import com.example.eduapp.helper.rememberAssetImage
 
 @OptIn(ExperimentalMaterial3Api::class)
-
 @Composable
-fun GameScreen(currentContext: Context, navController: NavHostController,
-               imagePath: String = "2/level02_pic03_4.jpg",
-               modifier: Modifier = Modifier) {
+fun GameScreen(
+    currentContext: Context,
+    navController: NavHostController,
+    level: Int = 1,
+    imagePath: String = "2/level02_pic03_4.jpg",
+    modifier: Modifier = Modifier
+) {
     val imageBitmap = rememberAssetImage(imagePath)
     Scaffold(
-        topBar = { TopAppBar(title = { Text("Game Screen") }) }
-    ) {
-            innerPadding ->
-        Column(modifier
-            .fillMaxSize()
-            .padding(innerPadding)
-            .padding(16.dp),
+        topBar = { TopAppBar(title = { Text("Game Screen - Level $level") }) }
+    ) { innerPadding ->
+        Column(
+            modifier
+                .fillMaxSize()
+                .padding(innerPadding)
+                .padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center) {
+            verticalArrangement = Arrangement.Center
+        ) {
             Text(
                 text = "Displaying Asset Image",
                 style = MaterialTheme.typography.headlineMedium
@@ -65,8 +69,9 @@ fun GameScreen(currentContext: Context, navController: NavHostController,
                 text = "Path: assets/$imagePath",
                 style = MaterialTheme.typography.bodySmall
             )
-            Button(onClick = {navController.navigate("score")})
-            { Text("Go to Score") }
+            Button(onClick = { navController.navigate("score") }) {
+                Text("Go to Score")
+            }
         }
     }
 }

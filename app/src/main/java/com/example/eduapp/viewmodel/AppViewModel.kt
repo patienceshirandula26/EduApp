@@ -33,6 +33,13 @@ class AppViewModel(
 
     fun totalPuzzleCount(): Int = puzzleRepository.allPuzzles().size
 
+    fun puzzleCountForLevel(level: Int): Int = puzzleRepository.puzzlesForLevel(level).size
+
+    fun randomLevel(): Int = puzzleRepository.availableLevels().random()
+
+    fun bestForLevel(username: String, level: Int): Flow<Int> =
+        resultRepository.bestForLevel(username, level)
+
     fun resultsFor(username: String): Flow<List<QuizResult>> =
         resultRepository.resultsFor(username)
 

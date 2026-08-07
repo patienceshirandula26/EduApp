@@ -89,7 +89,7 @@ fun LandingScreen(
             }
 
             Button(
-                onClick = { navController.navigate("game") },
+                onClick = { navController.navigate("levels") },
                 modifier = Modifier.fillMaxWidth().height(64.dp)
             ) {
                 Icon(Icons.Default.PlayArrow, contentDescription = null)
