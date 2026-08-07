@@ -13,20 +13,29 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 
-//Score Screen
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ScoreScreen(navController: NavHostController, modifier: Modifier = Modifier) {
+fun ScoreScreen(
+    navController: NavHostController,
+    level: Int = 1,
+    score: Int = 0,
+    total: Int = 0,
+    modifier: Modifier = Modifier
+) {
     Scaffold(
         topBar = { TopAppBar(title = { Text("Score Screen") }) }
-    ) {
-            innerPadding ->
-        Column(modifier
-            .fillMaxSize()
-            .padding(innerPadding)
-            .padding(16.dp)) {
-            Button(onClick = {navController.navigate("landing")})
-            { Text("Go back to landing") }
+    ) { innerPadding ->
+        Column(
+            modifier
+                .fillMaxSize()
+                .padding(innerPadding)
+                .padding(16.dp)
+        ) {
+            Text("Level: $level")
+            Text("Score: $score / $total")
+            Button(onClick = { navController.navigate("landing") }) {
+                Text("Go back to landing")
+            }
         }
     }
 }

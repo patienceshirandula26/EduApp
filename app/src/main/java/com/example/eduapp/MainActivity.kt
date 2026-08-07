@@ -59,10 +59,24 @@ fun AppNav(currentContext: Context) {
             route = "game/{level}",
             arguments = listOf(navArgument("level") { type = NavType.IntType })
         ) { backStackEntry ->
-            val level = backStackEntry.arguments?.getInt("level") ?: 1
-            GameScreen(currentContext, navController, level)
+            GameScreen(navController, backStackEntry.arguments?.getInt("level") ?: 1)
         }
-        composable("score") { ScoreScreen(navController) }
+        composable(
+            route = "score/{level}/{score}/{total}",
+            arguments = listOf(
+                navArgument("level") { type = NavType.IntType },
+                navArgument("score") { type = NavType.IntType },
+                navArgument("total") { type = NavType.IntType }
+            )
+        ) { backStackEntry ->
+            val args = backStackEntry.arguments
+            ScoreScreen(
+                navController = navController,
+                level = args?.getInt("level") ?: 1,
+                score = args?.getInt("score") ?: 0,
+                total = args?.getInt("total") ?: 0
+            )
+        }
         composable("testDB") { TestDBScreen() }
     }
 }
