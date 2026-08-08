@@ -22,6 +22,7 @@ import com.example.eduapp.screen.LandingScreen
 import com.example.eduapp.screen.LevelScreen
 import com.example.eduapp.screen.ScoreScreen
 import com.example.eduapp.screen.SettingScreen
+import com.example.eduapp.screen.StatisticsScreen
 import com.example.eduapp.screen.TestDBScreen
 import com.example.eduapp.screen.WelcomeScreen
 import com.example.eduapp.ui.theme.EduAppTheme
@@ -55,6 +56,7 @@ fun AppNav(currentContext: Context) {
         composable("landing") { LandingScreen(navController) }
         composable("setting") { SettingScreen(navController) }
         composable("levels") { LevelScreen(navController) }
+        composable("statistics") { StatisticsScreen(navController) }
         composable(
             route = "game/{level}",
             arguments = listOf(navArgument("level") { type = NavType.IntType })

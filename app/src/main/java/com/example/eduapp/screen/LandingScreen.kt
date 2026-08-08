@@ -104,6 +104,13 @@ fun LandingScreen(
                 Icon(Icons.Default.Settings, contentDescription = null)
                 Text("  Settings")
             }
+
+            FilledTonalButton(
+                onClick = { navController.navigate("statistics") },
+                modifier = Modifier.fillMaxWidth().height(52.dp)
+            ) {
+                Text("My progress")
+            }
         }
     }
 }

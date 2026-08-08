@@ -26,6 +26,12 @@ interface AppDao {
     @Query("SELECT COALESCE(MAX(correct), 0) FROM quiz_results WHERE username = :username AND level = :level")
     fun bestForLevel(username: String, level: Int): Flow<Int>
 
+    @Query("SELECT COALESCE(SUM(total), 0) FROM quiz_results WHERE username = :username")
+    fun totalAttempted(username: String): Flow<Int>
+
+    @Query("SELECT COALESCE(MAX(correct), 0) FROM quiz_results WHERE username = :username")
+    fun bestScore(username: String): Flow<Int>
+
     @Query("DELETE FROM quiz_results WHERE username = :username")
     suspend fun clearFor(username: String)
 

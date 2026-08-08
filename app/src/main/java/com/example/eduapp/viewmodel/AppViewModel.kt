@@ -66,6 +66,10 @@ class AppViewModel(
 
     fun totalCorrect(username: String): Flow<Int> = resultRepository.totalCorrect(username)
 
+    fun totalAttempted(username: String): Flow<Int> = resultRepository.totalAttempted(username)
+
+    fun bestScore(username: String): Flow<Int> = resultRepository.bestScore(username)
+
     fun saveQuizResult(level: Int, correct: Int, total: Int, durationSeconds: Int) {
         viewModelScope.launch {
             // Read from DataStore directly - settings.value can be stale when
@@ -90,5 +94,12 @@ class AppViewModel(
 
     fun clearResults(username: String) {
         viewModelScope.launch { resultRepository.clearFor(username) }
+    }
+
+    fun clearMyResults() {
+        viewModelScope.launch {
+            val name = userPreferences.settings.first().username
+            if (name.isNotBlank()) resultRepository.clearFor(name)
+        }
     }
 }
