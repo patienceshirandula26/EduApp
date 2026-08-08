@@ -1,58 +1,77 @@
 package com.example.eduapp.ui.theme
 
-import android.app.Activity
-import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Shapes
 import androidx.compose.material3.darkColorScheme
-import androidx.compose.material3.dynamicDarkColorScheme
-import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
 
-private val DarkColorScheme = darkColorScheme(
-    primary = Purple80,
-    secondary = PurpleGrey80,
-    tertiary = Pink80
+// Generous corners everywhere. This is a game, not a form.
+private val PicQuizShapes = Shapes(
+    extraSmall = RoundedCornerShape(10.dp),
+    small = RoundedCornerShape(14.dp),
+    medium = RoundedCornerShape(20.dp),
+    large = RoundedCornerShape(28.dp),
+    extraLarge = RoundedCornerShape(36.dp)
 )
 
-private val LightColorScheme = lightColorScheme(
-    primary = Purple40,
-    secondary = PurpleGrey40,
-    tertiary = Pink40
-
-    /* Other default colors to override
-    background = Color(0xFFFFFBFE),
-    surface = Color(0xFFFFFBFE),
+private val LightColors = lightColorScheme(
+    primary = CoralDeep,
     onPrimary = Color.White,
-    onSecondary = Color.White,
-    onTertiary = Color.White,
-    onBackground = Color(0xFF1C1B1F),
-    onSurface = Color(0xFF1C1B1F),
-    */
+    primaryContainer = CreamVariant,
+    onPrimaryContainer = Plum,
+    secondary = Sunshine,
+    onSecondary = Plum,
+    secondaryContainer = SunshineSoft,
+    onSecondaryContainer = Plum,
+    tertiary = Mint,
+    onTertiary = Plum,
+    tertiaryContainer = MintSoft,
+    onTertiaryContainer = Plum,
+    background = CreamBg,
+    onBackground = InkDark,
+    surface = CreamCard,
+    onSurface = InkDark,
+    surfaceVariant = CreamVariant,
+    onSurfaceVariant = InkSoft,
+    outline = Color(0xFFE0C4B8)
+)
+
+private val DarkColors = darkColorScheme(
+    primary = Coral,
+    onPrimary = Plum,
+    primaryContainer = PlumLight,
+    onPrimaryContainer = Color.White,
+    secondary = Sunshine,
+    onSecondary = Plum,
+    secondaryContainer = Color(0xFF6B4A1F),
+    onSecondaryContainer = SunshineSoft,
+    tertiary = Mint,
+    onTertiary = Plum,
+    tertiaryContainer = Color(0xFF1B5C48),
+    onTertiaryContainer = MintSoft,
+    background = Plum,
+    onBackground = Color(0xFFF5EDF5),
+    surface = PlumLight,
+    onSurface = Color(0xFFF5EDF5),
+    surfaceVariant = Color(0xFF3D2650),
+    onSurfaceVariant = Color(0xFFD9C4E0),
+    outline = Color(0xFF6B4A7C)
 )
 
 @Composable
 fun EduAppTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    // Dynamic color is available on Android 12+
-    dynamicColor: Boolean = true,
     content: @Composable () -> Unit
 ) {
-    val colorScheme = when {
-        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
-            val context = LocalContext.current
-            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
-        }
-
-        darkTheme -> DarkColorScheme
-        else -> LightColorScheme
-    }
-
     MaterialTheme(
-        colorScheme = colorScheme,
+        colorScheme = if (darkTheme) DarkColors else LightColors,
         typography = Typography,
+        shapes = PicQuizShapes,
         content = content
     )
 }
