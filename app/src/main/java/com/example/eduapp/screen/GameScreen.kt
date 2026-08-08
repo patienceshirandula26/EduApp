@@ -1,6 +1,5 @@
 package com.example.eduapp.screen
 
-import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -46,6 +45,15 @@ import androidx.navigation.NavHostController
 import com.example.eduapp.helper.rememberAssetImage
 import com.example.eduapp.model.AnswerOptions
 import com.example.eduapp.model.TimeFormat
+import com.example.eduapp.ui.theme.AnswerRight
+import com.example.eduapp.ui.theme.AnswerWrong
+import com.example.eduapp.ui.theme.ChunkyButton
+import com.example.eduapp.ui.theme.GradientPanel
+import com.example.eduapp.ui.theme.Grape
+import com.example.eduapp.ui.theme.GrapeDeep
+import com.example.eduapp.ui.theme.GrapeNight
+import com.example.eduapp.ui.theme.Midnight
+import com.example.eduapp.ui.theme.gradientForLevel
 import com.example.eduapp.viewmodel.AppViewModel
 import kotlinx.coroutines.delay
 import org.koin.androidx.compose.koinViewModel
@@ -109,19 +117,26 @@ fun GameScreen(
                 modifier = Modifier.fillMaxWidth().height(8.dp)
             )
 
-            Row(
+            GradientPanel(
+                colours = gradientForLevel(level),
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
+                corner = 20
             ) {
-                Text("Score: $score", style = MaterialTheme.typography.titleMedium)
-                Surface(
-                    shape = androidx.compose.foundation.shape.CircleShape,
-                    color = MaterialTheme.colorScheme.secondaryContainer
+                Row(
+                    modifier = Modifier.padding(horizontal = 20.dp, vertical = 14.dp)
+                        .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = TimeFormat.format(elapsed),
-                        modifier = Modifier.padding(horizontal = 14.dp, vertical = 4.dp),
-                        style = MaterialTheme.typography.titleMedium
+                        "Score $score",
+                        style = MaterialTheme.typography.titleLarge,
+                        color = Color.White
+                    )
+                    Text(
+                        TimeFormat.format(elapsed),
+                        style = MaterialTheme.typography.titleLarge,
+                        color = Color.White.copy(alpha = 0.9f)
                     )
                 }
             }
@@ -152,20 +167,30 @@ fun GameScreen(
             )
 
             options.chunked(2).forEach { rowOptions ->
-                Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(12.dp),
+                    modifier = Modifier.fillMaxWidth()
+                ) {
                     rowOptions.forEach { option ->
                         val isCorrect = option == puzzle.answer
-                        val colour by animateColorAsState(
-                            targetValue = when {
-                                selected == null -> MaterialTheme.colorScheme.secondaryContainer
-                                isCorrect -> Color(0xFF23C16B)
-                                option == selected -> Color(0xFFE5484D)
-                                else -> MaterialTheme.colorScheme.surfaceVariant
-                            },
-                            label = "optionColour"
-                        )
+                        val revealed = selected != null
 
-                        Button(
+                        val colours = when {
+                            !revealed -> listOf(Grape, GrapeDeep)
+                            isCorrect -> listOf(AnswerRight, Color(0xFF16A34A))
+                            option == selected -> listOf(AnswerWrong, Color(0xFFE11D48))
+                            else -> listOf(Color(0xFFD4CCF0), Color(0xFFBFB4E8))
+                        }
+
+                        val base = when {
+                            !revealed -> GrapeNight
+                            isCorrect -> Color(0xFF14532D)
+                            option == selected -> Color(0xFF881337)
+                            else -> Color(0xFF9C90C8)
+                        }
+
+                        ChunkyButton(
+                            text = "$option",
                             onClick = {
                                 if (selected == null) {
                                     selected = option
@@ -177,14 +202,14 @@ fun GameScreen(
                                     }
                                 }
                             },
-                            modifier = Modifier.weight(1f).height(64.dp),
-                            colors = androidx.compose.material3.ButtonDefaults.buttonColors(
-                                containerColor = colour,
-                                contentColor = MaterialTheme.colorScheme.onSurface
-                            )
-                        ) {
-                            Text("$option", style = MaterialTheme.typography.headlineSmall)
-                        }
+                            modifier = Modifier.weight(1f),
+                            colours = colours,
+                            baseColour = base,
+                            contentColour = if (revealed && !isCorrect && option != selected)
+                                Midnight else Color.White,
+                            height = 66,
+                            enabled = selected == null
+                        )
                     }
                 }
             }
@@ -196,7 +221,8 @@ fun GameScreen(
                     style = MaterialTheme.typography.titleMedium
                 )
 
-                Button(
+                ChunkyButton(
+                    text = if (index < puzzles.lastIndex) "Next puzzle" else "See results",
                     onClick = {
                         if (index < puzzles.lastIndex) {
                             index++
@@ -207,10 +233,9 @@ fun GameScreen(
                             navController.navigate("score/$level/$score/${puzzles.size}/$seconds")
                         }
                     },
-                    modifier = Modifier.fillMaxWidth().height(56.dp)
-                ) {
-                    Text(if (index < puzzles.lastIndex) "Next puzzle" else "See results")
-                }
+                    modifier = Modifier.fillMaxWidth(),
+                    height = 58
+                )
             }
 
             Spacer(Modifier.height(20.dp))
