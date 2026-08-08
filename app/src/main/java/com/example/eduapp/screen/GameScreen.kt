@@ -32,8 +32,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -55,6 +57,7 @@ import com.example.eduapp.ui.theme.GrapeNight
 import com.example.eduapp.ui.theme.Midnight
 import com.example.eduapp.ui.theme.gradientForLevel
 import com.example.eduapp.viewmodel.AppViewModel
+import kotlin.random.Random
 import kotlinx.coroutines.delay
 import org.koin.androidx.compose.koinViewModel
 
@@ -66,14 +69,18 @@ fun GameScreen(
     modifier: Modifier = Modifier,
     viewModel: AppViewModel = koinViewModel()
 ) {
-    // Shuffled once per round so the order differs every time you play.
-    val puzzles = remember(level) { viewModel.puzzlesForLevel(level).shuffled() }
+    // Saving the seed rather than the list means the same shuffle is rebuilt
+    // after a rotation, so index still points at the same puzzle.
+    val seed by rememberSaveable(level) { mutableLongStateOf(System.nanoTime()) }
+    val puzzles = remember(level, seed) {
+        viewModel.puzzlesForLevel(level).shuffled(Random(seed))
+    }
 
-    var index by remember { mutableIntStateOf(0) }
-    var score by remember { mutableIntStateOf(0) }
-    var selected by remember { mutableStateOf<Int?>(null) }
-    val startedAt = remember(level) { System.currentTimeMillis() }
-    var elapsed by remember(level) { mutableIntStateOf(0) }
+    var index by rememberSaveable(level) { mutableIntStateOf(0) }
+    var score by rememberSaveable(level) { mutableIntStateOf(0) }
+    var selected by rememberSaveable(level) { mutableStateOf<Int?>(null) }
+    val startedAt by rememberSaveable(level) { mutableLongStateOf(System.currentTimeMillis()) }
+    var elapsed by rememberSaveable(level) { mutableIntStateOf(0) }
 
     LaunchedEffect(level, selected) {
         while (selected == null) {
@@ -88,7 +95,9 @@ fun GameScreen(
     }
 
     val puzzle = puzzles[index]
-    val options = remember(puzzle.id) { AnswerOptions.optionsFor(puzzle.answer) }
+    val options = remember(puzzle.id, seed) {
+        AnswerOptions.optionsFor(puzzle.answer, Random(seed + puzzle.id.hashCode()))
+    }
     val imageState by rememberAssetImage(puzzle.assetPath)
     val image = imageState
 

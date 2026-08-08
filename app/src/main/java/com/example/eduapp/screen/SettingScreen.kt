@@ -32,6 +32,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -52,7 +53,7 @@ fun SettingScreen(
     val settings by viewModel.settings.collectAsStateWithLifecycle()
 
     // Held locally while dragging so DataStore isn't written on every pixel.
-    var sliderValue by remember(settings.volume) { mutableFloatStateOf(settings.volume) }
+    var sliderValue by rememberSaveable(settings.volume) { mutableFloatStateOf(settings.volume) }
 
     Scaffold(
         topBar = {

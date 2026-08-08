@@ -28,6 +28,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -68,7 +69,7 @@ fun StatisticsScreen(
     val history by remember(name) { viewModel.resultsFor(name) }
         .collectAsStateWithLifecycle(initialValue = emptyList())
 
-    var confirmClear by remember { mutableStateOf(false) }
+    var confirmClear by rememberSaveable { mutableStateOf(false) }
     val accuracy = if (attempted > 0) (correct * 100) / attempted else 0
 
     if (confirmClear) {
