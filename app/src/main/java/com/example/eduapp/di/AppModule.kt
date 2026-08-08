@@ -7,12 +7,17 @@ import com.example.eduapp.data.PuzzleRepositoryImpl
 import com.example.eduapp.data.ResultRepository
 import com.example.eduapp.data.ResultRepositoryImpl
 import com.example.eduapp.data.UserPreferences
+import com.example.eduapp.data.WordRepository
+import com.example.eduapp.data.WordRepositoryImpl
 import com.example.eduapp.database.AppDatabase
 import com.example.eduapp.helper.SoundPlayer
+import com.example.eduapp.network.WordApi
 import com.example.eduapp.viewmodel.AppViewModel
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 /**
  * The dependency graph. Every object the app needs is declared once here,
@@ -39,5 +44,16 @@ val appModule = module {
     single<PuzzleRepository> { PuzzleRepositoryImpl(get()) }
     single<ResultRepository> { ResultRepositoryImpl(get()) }
 
-    viewModel { AppViewModel(get(), get(), get(), get()) }
+    single {
+        Retrofit.Builder()
+            .baseUrl(WordApi.BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+    }
+
+    single { get<Retrofit>().create(WordApi::class.java) }
+
+    single<WordRepository> { WordRepositoryImpl(get()) }
+
+    viewModel { AppViewModel(get(), get(), get(), get(), get()) }
 }

@@ -8,13 +8,18 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -24,6 +29,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
+import com.example.eduapp.data.WordState
 import com.example.eduapp.ui.theme.ChunkyButton
 import com.example.eduapp.ui.theme.GradientPanel
 import com.example.eduapp.ui.theme.SkyGradient
@@ -55,6 +61,7 @@ fun LandingScreen(
 
     val played by playedFlow.collectAsStateWithLifecycle(initialValue = 0)
     val correct by correctFlow.collectAsStateWithLifecycle(initialValue = 0)
+    val word by viewModel.wordOfDay.collectAsStateWithLifecycle()
 
     Scaffold(
         topBar = { CenterAlignedTopAppBar(title = { Text("PicQuiz") }) }
@@ -142,6 +149,43 @@ fun LandingScreen(
                 contentColour = Midnight,
                 height = 54
             )
+
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.secondaryContainer
+                )
+            ) {
+                Column(Modifier.padding(18.dp)) {
+                    Text("WORD OF THE DAY", style = MaterialTheme.typography.labelSmall)
+                    Spacer(Modifier.height(8.dp))
+
+                    when (val w = word) {
+                        is WordState.Loading -> Row(verticalAlignment = Alignment.CenterVertically) {
+                            CircularProgressIndicator(
+                                modifier = Modifier.size(18.dp),
+                                strokeWidth = 2.dp
+                            )
+                            Text("  Loading...", style = MaterialTheme.typography.bodyMedium)
+                        }
+
+                        is WordState.Error -> Column {
+                            Text(w.message, style = MaterialTheme.typography.bodyMedium)
+                            TextButton(onClick = { viewModel.loadWordOfDay() }) {
+                                Text("Try again")
+                            }
+                        }
+
+                        is WordState.Success -> Column {
+                            Text(
+                                w.word.replaceFirstChar { it.uppercase() },
+                                style = MaterialTheme.typography.headlineSmall
+                            )
+                            Text(w.definition, style = MaterialTheme.typography.bodyMedium)
+                        }
+                    }
+                }
+            }
         }
     }
 }

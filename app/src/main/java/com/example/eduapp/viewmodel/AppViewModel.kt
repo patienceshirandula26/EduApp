@@ -6,12 +6,16 @@ import com.example.eduapp.data.AppSettings
 import com.example.eduapp.data.PuzzleRepository
 import com.example.eduapp.data.ResultRepository
 import com.example.eduapp.data.UserPreferences
+import com.example.eduapp.data.WordRepository
+import com.example.eduapp.data.WordState
 import com.example.eduapp.database.QuizResult
 import com.example.eduapp.helper.SoundPlayer
 import com.example.eduapp.model.Puzzle
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -20,11 +24,26 @@ class AppViewModel(
     private val puzzleRepository: PuzzleRepository,
     private val resultRepository: ResultRepository,
     private val userPreferences: UserPreferences,
-    private val soundPlayer: SoundPlayer
+    private val soundPlayer: SoundPlayer,
+    private val wordRepository: WordRepository
 ) : ViewModel() {
+
+    private val _wordOfDay = MutableStateFlow<WordState>(WordState.Loading)
+    val wordOfDay: StateFlow<WordState> = _wordOfDay.asStateFlow()
 
     val settings: StateFlow<AppSettings> = userPreferences.settings
         .stateIn(viewModelScope, SharingStarted.Eagerly, AppSettings())
+
+    init {
+        loadWordOfDay()
+    }
+
+    fun loadWordOfDay() {
+        viewModelScope.launch {
+            _wordOfDay.value = WordState.Loading
+            _wordOfDay.value = wordRepository.wordOfTheDay()
+        }
+    }
 
     fun setUsername(name: String) {
         viewModelScope.launch { userPreferences.setUsername(name) }
