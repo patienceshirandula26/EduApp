@@ -19,10 +19,16 @@ class SoundPlayer(context: Context) {
 
     private val correctId = pool.load(context, R.raw.correct, 1)
     private val wrongId = pool.load(context, R.raw.wrong, 1)
+    private val levelCompleteId = pool.load(context, R.raw.level_complete, 1)
+    private val perfectScoreId = pool.load(context, R.raw.perfect_score, 1)
 
     fun playCorrect(enabled: Boolean, volume: Float) = play(correctId, enabled, volume)
 
     fun playWrong(enabled: Boolean, volume: Float) = play(wrongId, enabled, volume)
+
+    fun playLevelComplete(enabled: Boolean, volume: Float) = play(levelCompleteId, enabled, volume)
+
+    fun playPerfectScore(enabled: Boolean, volume: Float) = play(perfectScoreId, enabled, volume)
 
     private fun play(id: Int, enabled: Boolean, volume: Float) {
         if (!enabled) return

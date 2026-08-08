@@ -40,6 +40,12 @@ class AppViewModel(
         soundPlayer.playWrong(s.soundEnabled, s.volume)
     }
 
+    fun playRoundFinishedSound(isPerfect: Boolean) {
+        val s = settings.value
+        if (isPerfect) soundPlayer.playPerfectScore(s.soundEnabled, s.volume)
+        else soundPlayer.playLevelComplete(s.soundEnabled, s.volume)
+    }
+
     fun availableLevels(): List<Int> = puzzleRepository.availableLevels()
 
     fun puzzlesForLevel(level: Int): List<Puzzle> = puzzleRepository.puzzlesForLevel(level)
