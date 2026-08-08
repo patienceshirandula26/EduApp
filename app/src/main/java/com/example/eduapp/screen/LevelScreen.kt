@@ -1,6 +1,8 @@
 package com.example.eduapp.screen
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -35,6 +37,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
+import com.example.eduapp.ui.theme.GradientPanel
+import com.example.eduapp.ui.theme.gradientForLevel
 import com.example.eduapp.viewmodel.AppViewModel
 import org.koin.androidx.compose.koinViewModel
 
@@ -114,37 +118,39 @@ private fun LevelCard(
         else -> "Level $level"
     }
 
-    Card(
-        onClick = onClick,
-        modifier = Modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant
-        )
+    GradientPanel(
+        colours = gradientForLevel(level),
+        modifier = Modifier.fillMaxWidth().clickable(onClick = onClick)
     ) {
         Row(
-            modifier = Modifier.padding(18.dp).fillMaxWidth(),
+            modifier = Modifier.padding(20.dp).fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             Surface(
                 shape = CircleShape,
-                color = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.size(48.dp)
+                color = Color.White.copy(alpha = 0.25f),
+                modifier = Modifier.size(52.dp)
             ) {
-                Text(
-                    text = "$level",
-                    style = MaterialTheme.typography.headlineSmall,
-                    color = Color.White,
-                    modifier = Modifier.padding(top = 10.dp),
-                    textAlign = androidx.compose.ui.text.style.TextAlign.Center
-                )
+                Box(contentAlignment = Alignment.Center) {
+                    Text(
+                        text = "$level",
+                        style = MaterialTheme.typography.headlineSmall,
+                        color = Color.White
+                    )
+                }
             }
             Column {
-                Text(label, style = MaterialTheme.typography.titleLarge)
+                Text(
+                    label,
+                    style = MaterialTheme.typography.titleLarge,
+                    color = Color.White
+                )
                 Text(
                     text = "$puzzleCount puzzles" +
-                        if (best > 0) "  -  best $best/$puzzleCount" else "",
-                    style = MaterialTheme.typography.bodySmall
+                        if (best > 0) "  •  best $best/$puzzleCount" else "",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = Color.White.copy(alpha = 0.9f)
                 )
             }
         }

@@ -10,16 +10,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.PlayArrow
-import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FilledTonalButton
-import androidx.compose.material3.Button
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -28,9 +20,21 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
+import com.example.eduapp.ui.theme.ChunkyButton
+import com.example.eduapp.ui.theme.GradientPanel
+import com.example.eduapp.ui.theme.SkyGradient
+import com.example.eduapp.ui.theme.Gold
+import com.example.eduapp.ui.theme.GoldLight
+import com.example.eduapp.ui.theme.Grape
+import com.example.eduapp.ui.theme.GrapeDeep
+import com.example.eduapp.ui.theme.GrapeNight
+import com.example.eduapp.ui.theme.Midnight
+import com.example.eduapp.ui.theme.Teal
+import com.example.eduapp.ui.theme.TealLight
 import com.example.eduapp.viewmodel.AppViewModel
 import org.koin.androidx.compose.koinViewModel
 
@@ -63,60 +67,81 @@ fun LandingScreen(
                 .padding(20.dp),
             verticalArrangement = Arrangement.spacedBy(18.dp)
         ) {
-            Text(
-                text = "Hi ${settings.username}",
-                style = MaterialTheme.typography.headlineMedium,
-                color = MaterialTheme.colorScheme.primary
-            )
-            Text(
-                text = "There are $puzzleCount picture puzzles waiting.",
-                style = MaterialTheme.typography.bodyLarge
-            )
+            GradientPanel(colours = SkyGradient, modifier = Modifier.fillMaxWidth()) {
+                Column(modifier = Modifier.padding(24.dp)) {
+                    Text(
+                        text = "Hi $name",
+                        style = MaterialTheme.typography.displaySmall,
+                        color = Color.White
+                    )
+                    Text(
+                        text = "$puzzleCount picture puzzles waiting",
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = Color.White.copy(alpha = 0.9f)
+                    )
 
-            Card(
-                modifier = Modifier.fillMaxWidth(),
-                colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.primaryContainer
-                )
-            ) {
-                Row(
-                    modifier = Modifier.padding(20.dp).fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceEvenly
-                ) {
-                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        Text("$played", style = MaterialTheme.typography.headlineMedium)
-                        Text("quizzes played", style = MaterialTheme.typography.labelSmall)
-                    }
-                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        Text("$correct", style = MaterialTheme.typography.headlineMedium)
-                        Text("puzzles solved", style = MaterialTheme.typography.labelSmall)
+                    Spacer(Modifier.height(20.dp))
+
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceEvenly
+                    ) {
+                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                            Text(
+                                "$played",
+                                style = MaterialTheme.typography.displaySmall,
+                                color = Color.White
+                            )
+                            Text(
+                                "quizzes",
+                                style = MaterialTheme.typography.labelSmall,
+                                color = Color.White.copy(alpha = 0.85f)
+                            )
+                        }
+                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                            Text(
+                                "$correct",
+                                style = MaterialTheme.typography.displaySmall,
+                                color = Color.White
+                            )
+                            Text(
+                                "solved",
+                                style = MaterialTheme.typography.labelSmall,
+                                color = Color.White.copy(alpha = 0.85f)
+                            )
+                        }
                     }
                 }
             }
 
-            Button(
+            Spacer(Modifier.height(4.dp))
+
+            ChunkyButton(
+                text = "Start playing",
                 onClick = { navController.navigate("levels") },
-                modifier = Modifier.fillMaxWidth().height(64.dp)
-            ) {
-                Icon(Icons.Default.PlayArrow, contentDescription = null)
-                Spacer(Modifier.height(8.dp))
-                Text("  Start playing", style = MaterialTheme.typography.titleLarge)
-            }
+                modifier = Modifier.fillMaxWidth(),
+                height = 68
+            )
 
-            FilledTonalButton(
-                onClick = { navController.navigate("setting") },
-                modifier = Modifier.fillMaxWidth().height(52.dp)
-            ) {
-                Icon(Icons.Default.Settings, contentDescription = null)
-                Text("  Settings")
-            }
-
-            FilledTonalButton(
+            ChunkyButton(
+                text = "My progress",
                 onClick = { navController.navigate("statistics") },
-                modifier = Modifier.fillMaxWidth().height(52.dp)
-            ) {
-                Text("My progress")
-            }
+                modifier = Modifier.fillMaxWidth(),
+                colours = listOf(GoldLight, Gold),
+                baseColour = Color(0xFFB45309),
+                contentColour = Midnight,
+                height = 54
+            )
+
+            ChunkyButton(
+                text = "Settings",
+                onClick = { navController.navigate("setting") },
+                modifier = Modifier.fillMaxWidth(),
+                colours = listOf(TealLight, Teal),
+                baseColour = Color(0xFF0F766E),
+                contentColour = Midnight,
+                height = 54
+            )
         }
     }
 }
