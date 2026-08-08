@@ -28,6 +28,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -45,7 +46,14 @@ fun LevelScreen(
     viewModel: AppViewModel = koinViewModel()
 ) {
     val settings by viewModel.settings.collectAsStateWithLifecycle()
-    val levels = viewModel.availableLevels()
+    val levels = remember { viewModel.availableLevels() }
+
+    val bestFlows = remember(settings.username, levels) {
+        levels.associateWith { viewModel.bestForLevel(settings.username, it) }
+    }
+    val counts = remember(levels) {
+        levels.associateWith { viewModel.puzzleCountForLevel(it) }
+    }
 
     Scaffold(
         topBar = {
@@ -78,11 +86,13 @@ fun LevelScreen(
             Spacer(Modifier.height(4.dp))
 
             levels.forEach { level ->
+                val best by bestFlows.getValue(level)
+                    .collectAsStateWithLifecycle(initialValue = 0)
+
                 LevelCard(
                     level = level,
-                    puzzleCount = viewModel.puzzleCountForLevel(level),
-                    best = viewModel.bestForLevel(settings.username, level)
-                        .collectAsStateWithLifecycle(initialValue = 0).value,
+                    puzzleCount = counts.getValue(level),
+                    best = best,
                     onClick = { navController.navigate("game/$level") }
                 )
             }

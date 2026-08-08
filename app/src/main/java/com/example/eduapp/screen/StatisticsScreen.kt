@@ -53,13 +53,20 @@ fun StatisticsScreen(
     val settings by viewModel.settings.collectAsStateWithLifecycle()
     val name = settings.username
 
-    val played by viewModel.quizzesPlayed(name).collectAsStateWithLifecycle(initialValue = 0)
-    val correct by viewModel.totalCorrect(name).collectAsStateWithLifecycle(initialValue = 0)
-    val attempted by viewModel.totalAttempted(name).collectAsStateWithLifecycle(initialValue = 0)
-    val best by viewModel.bestScore(name).collectAsStateWithLifecycle(initialValue = 0)
-    val avgTime by viewModel.averageDuration(name).collectAsStateWithLifecycle(initialValue = 0.0)
-    val fastest by viewModel.fastestRound(name).collectAsStateWithLifecycle(initialValue = 0)
-    val history by viewModel.resultsFor(name).collectAsStateWithLifecycle(initialValue = emptyList())
+    val played by remember(name) { viewModel.quizzesPlayed(name) }
+        .collectAsStateWithLifecycle(initialValue = 0)
+    val correct by remember(name) { viewModel.totalCorrect(name) }
+        .collectAsStateWithLifecycle(initialValue = 0)
+    val attempted by remember(name) { viewModel.totalAttempted(name) }
+        .collectAsStateWithLifecycle(initialValue = 0)
+    val best by remember(name) { viewModel.bestScore(name) }
+        .collectAsStateWithLifecycle(initialValue = 0)
+    val avgTime by remember(name) { viewModel.averageDuration(name) }
+        .collectAsStateWithLifecycle(initialValue = 0.0)
+    val fastest by remember(name) { viewModel.fastestRound(name) }
+        .collectAsStateWithLifecycle(initialValue = 0)
+    val history by remember(name) { viewModel.resultsFor(name) }
+        .collectAsStateWithLifecycle(initialValue = emptyList())
 
     var confirmClear by remember { mutableStateOf(false) }
     val accuracy = if (attempted > 0) (correct * 100) / attempted else 0

@@ -67,8 +67,8 @@ fun GameScreen(
     val startedAt = remember(level) { System.currentTimeMillis() }
     var elapsed by remember(level) { mutableIntStateOf(0) }
 
-    LaunchedEffect(level) {
-        while (true) {
+    LaunchedEffect(level, selected) {
+        while (selected == null) {
             delay(1_000)
             elapsed = ((System.currentTimeMillis() - startedAt) / 1000).toInt()
         }

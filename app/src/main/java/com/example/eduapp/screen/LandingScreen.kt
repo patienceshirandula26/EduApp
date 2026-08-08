@@ -25,6 +25,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -41,10 +42,15 @@ fun LandingScreen(
     viewModel: AppViewModel = koinViewModel()
 ) {
     val settings by viewModel.settings.collectAsStateWithLifecycle()
-    val played by viewModel.quizzesPlayed(settings.username)
-        .collectAsStateWithLifecycle(initialValue = 0)
-    val correct by viewModel.totalCorrect(settings.username)
-        .collectAsStateWithLifecycle(initialValue = 0)
+    val name = settings.username
+
+    // remember() so a new Room query isn't built on every recomposition.
+    val playedFlow = remember(name) { viewModel.quizzesPlayed(name) }
+    val correctFlow = remember(name) { viewModel.totalCorrect(name) }
+    val puzzleCount = remember { viewModel.totalPuzzleCount() }
+
+    val played by playedFlow.collectAsStateWithLifecycle(initialValue = 0)
+    val correct by correctFlow.collectAsStateWithLifecycle(initialValue = 0)
 
     Scaffold(
         topBar = { CenterAlignedTopAppBar(title = { Text("PicQuiz") }) }
@@ -63,7 +69,7 @@ fun LandingScreen(
                 color = MaterialTheme.colorScheme.primary
             )
             Text(
-                text = "There are ${viewModel.totalPuzzleCount()} picture puzzles waiting.",
+                text = "There are $puzzleCount picture puzzles waiting.",
                 style = MaterialTheme.typography.bodyLarge
             )
 
