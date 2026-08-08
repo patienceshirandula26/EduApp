@@ -26,9 +26,11 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -43,7 +45,9 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.eduapp.helper.rememberAssetImage
 import com.example.eduapp.model.AnswerOptions
+import com.example.eduapp.model.TimeFormat
 import com.example.eduapp.viewmodel.AppViewModel
+import kotlinx.coroutines.delay
 import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -61,6 +65,14 @@ fun GameScreen(
     var score by remember { mutableIntStateOf(0) }
     var selected by remember { mutableStateOf<Int?>(null) }
     val startedAt = remember(level) { System.currentTimeMillis() }
+    var elapsed by remember(level) { mutableIntStateOf(0) }
+
+    LaunchedEffect(level) {
+        while (true) {
+            delay(1_000)
+            elapsed = ((System.currentTimeMillis() - startedAt) / 1000).toInt()
+        }
+    }
 
     if (puzzles.isEmpty()) {
         Text("No puzzles found for level $level")
@@ -97,7 +109,22 @@ fun GameScreen(
                 modifier = Modifier.fillMaxWidth().height(8.dp)
             )
 
-            Text("Score: $score", style = MaterialTheme.typography.titleMedium)
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text("Score: $score", style = MaterialTheme.typography.titleMedium)
+                Surface(
+                    shape = androidx.compose.foundation.shape.CircleShape,
+                    color = MaterialTheme.colorScheme.secondaryContainer
+                ) {
+                    Text(
+                        text = TimeFormat.format(elapsed),
+                        modifier = Modifier.padding(horizontal = 14.dp, vertical = 4.dp),
+                        style = MaterialTheme.typography.titleMedium
+                    )
+                }
+            }
 
             Card(
                 modifier = Modifier.fillMaxWidth().aspectRatio(1f),
@@ -177,7 +204,7 @@ fun GameScreen(
                         } else {
                             val seconds = ((System.currentTimeMillis() - startedAt) / 1000).toInt()
                             viewModel.saveQuizResult(level, score, puzzles.size, seconds)
-                            navController.navigate("score/$level/$score/${puzzles.size}")
+                            navController.navigate("score/$level/$score/${puzzles.size}/$seconds")
                         }
                     },
                     modifier = Modifier.fillMaxWidth().height(56.dp)

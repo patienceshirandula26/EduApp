@@ -39,6 +39,7 @@ fun ScoreScreen(
     level: Int,
     score: Int,
     total: Int,
+    seconds: Int = 0,
     modifier: Modifier = Modifier,
     viewModel: AppViewModel = koinViewModel()
 ) {
@@ -87,6 +88,11 @@ fun ScoreScreen(
 
         Text(
             text = "Level $level",
+            style = MaterialTheme.typography.bodyMedium
+        )
+
+        Text(
+            text = "Finished in ${com.example.eduapp.model.TimeFormat.format(seconds)}",
             style = MaterialTheme.typography.bodyMedium
         )
 

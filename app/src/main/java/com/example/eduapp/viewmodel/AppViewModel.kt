@@ -70,6 +70,10 @@ class AppViewModel(
 
     fun bestScore(username: String): Flow<Int> = resultRepository.bestScore(username)
 
+    fun averageDuration(username: String): Flow<Double> = resultRepository.averageDuration(username)
+
+    fun fastestRound(username: String): Flow<Int> = resultRepository.fastestRound(username)
+
     fun saveQuizResult(level: Int, correct: Int, total: Int, durationSeconds: Int) {
         viewModelScope.launch {
             // Read from DataStore directly - settings.value can be stale when

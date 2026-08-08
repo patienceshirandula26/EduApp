@@ -32,6 +32,12 @@ interface AppDao {
     @Query("SELECT COALESCE(MAX(correct), 0) FROM quiz_results WHERE username = :username")
     fun bestScore(username: String): Flow<Int>
 
+    @Query("SELECT COALESCE(AVG(durationSeconds), 0) FROM quiz_results WHERE username = :username")
+    fun averageDuration(username: String): Flow<Double>
+
+    @Query("SELECT COALESCE(MIN(durationSeconds), 0) FROM quiz_results WHERE username = :username")
+    fun fastestRound(username: String): Flow<Int>
+
     @Query("DELETE FROM quiz_results WHERE username = :username")
     suspend fun clearFor(username: String)
 

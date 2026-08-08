@@ -36,6 +36,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.example.eduapp.database.QuizResult
+import com.example.eduapp.model.TimeFormat
 import com.example.eduapp.viewmodel.AppViewModel
 import org.koin.androidx.compose.koinViewModel
 import java.text.SimpleDateFormat
@@ -56,6 +57,8 @@ fun StatisticsScreen(
     val correct by viewModel.totalCorrect(name).collectAsStateWithLifecycle(initialValue = 0)
     val attempted by viewModel.totalAttempted(name).collectAsStateWithLifecycle(initialValue = 0)
     val best by viewModel.bestScore(name).collectAsStateWithLifecycle(initialValue = 0)
+    val avgTime by viewModel.averageDuration(name).collectAsStateWithLifecycle(initialValue = 0.0)
+    val fastest by viewModel.fastestRound(name).collectAsStateWithLifecycle(initialValue = 0)
     val history by viewModel.resultsFor(name).collectAsStateWithLifecycle(initialValue = emptyList())
 
     var confirmClear by remember { mutableStateOf(false) }
@@ -113,6 +116,12 @@ fun StatisticsScreen(
                 StatBox("Quizzes", "$played", Modifier.weight(1f))
                 StatBox("Solved", "$correct", Modifier.weight(1f))
                 StatBox("Accuracy", "$accuracy%", Modifier.weight(1f))
+            }
+
+            Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                StatBox("Best round", "$best correct", Modifier.weight(1f))
+                StatBox("Average time", TimeFormat.format(avgTime.toInt()), Modifier.weight(1f))
+                StatBox("Fastest", TimeFormat.format(fastest), Modifier.weight(1f))
             }
 
             Card(

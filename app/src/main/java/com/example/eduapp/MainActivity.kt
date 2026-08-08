@@ -64,11 +64,12 @@ fun AppNav(currentContext: Context) {
             GameScreen(navController, backStackEntry.arguments?.getInt("level") ?: 1)
         }
         composable(
-            route = "score/{level}/{score}/{total}",
+            route = "score/{level}/{score}/{total}/{seconds}",
             arguments = listOf(
                 navArgument("level") { type = NavType.IntType },
                 navArgument("score") { type = NavType.IntType },
-                navArgument("total") { type = NavType.IntType }
+                navArgument("total") { type = NavType.IntType },
+                navArgument("seconds") { type = NavType.IntType }
             )
         ) { backStackEntry ->
             val args = backStackEntry.arguments
@@ -76,7 +77,8 @@ fun AppNav(currentContext: Context) {
                 navController = navController,
                 level = args?.getInt("level") ?: 1,
                 score = args?.getInt("score") ?: 0,
-                total = args?.getInt("total") ?: 0
+                total = args?.getInt("total") ?: 0,
+                seconds = args?.getInt("seconds") ?: 0
             )
         }
         composable("testDB") { TestDBScreen() }
