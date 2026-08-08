@@ -2,41 +2,45 @@ package com.example.eduapp.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-// Warm and playful. The puzzle art is pastel, so the app around it goes rich
-// and saturated to make the pictures pop.
+// Deep violet-blue "sky" with candy-bright buttons on top.
 
-val Coral = Color(0xFFFF6B6B)
-val CoralDeep = Color(0xFFE04B6E)
-val Magenta = Color(0xFFC44FA0)
-val Plum = Color(0xFF2D1B3D)
-val PlumLight = Color(0xFF4A2E5C)
+val Grape = Color(0xFF7C3AED)
+val GrapeDeep = Color(0xFF5B21B6)
+val GrapeNight = Color(0xFF2E1065)
 
-val Sunshine = Color(0xFFFFB84D)
-val SunshineSoft = Color(0xFFFFE0B2)
+val Sky = Color(0xFF3B82F6)
+val SkyLight = Color(0xFF60A5FA)
 
-val Mint = Color(0xFF2ED9A0)
-val MintSoft = Color(0xFFB8F5E0)
+val Teal = Color(0xFF14B8A6)
+val TealLight = Color(0xFF5EEAD4)
 
-val CreamBg = Color(0xFFFFF6F0)
-val CreamCard = Color(0xFFFFFFFF)
-val CreamVariant = Color(0xFFFFE8DC)
+val Leaf = Color(0xFF22C55E)
+val LeafLight = Color(0xFF4ADE80)
 
-val InkDark = Color(0xFF2D1B3D)
-val InkSoft = Color(0xFF6B5B75)
+val Gold = Color(0xFFFBBF24)
+val GoldLight = Color(0xFFFDE68A)
 
-// Right and wrong answers - green and red, but softened so a mistake
-// doesn't feel like an alarm going off.
-val AnswerRight = Color(0xFF2ED9A0)
-val AnswerWrong = Color(0xFFFF8B8B)
+val Bubblegum = Color(0xFFF472B6)
 
-/** Gradient pairs, one per level, getting warmer as difficulty rises. */
+val Cloud = Color(0xFFF3F0FF)
+val CloudCard = Color(0xFFFFFFFF)
+val CloudVariant = Color(0xFFE4DDFF)
+
+val Midnight = Color(0xFF1E1B4B)
+val MidnightSoft = Color(0xFF6D6A9C)
+
+val AnswerRight = Color(0xFF22C55E)
+val AnswerWrong = Color(0xFFFB7185)
+
+/** Sky gradient behind the hero areas. */
+val SkyGradient = listOf(Grape, Sky, Teal)
+
+/** One gradient per level, cool to warm as it gets harder. */
 val LevelGradients = listOf(
-    listOf(Mint, Color(0xFF4DD9C0)),
-    listOf(Sunshine, Color(0xFFFF9A5C)),
-    listOf(Coral, Magenta)
+    listOf(LeafLight, Leaf),
+    listOf(SkyLight, Sky),
+    listOf(Bubblegum, Grape)
 )
 
 fun gradientForLevel(level: Int): List<Color> =
     LevelGradients[(level - 1).coerceIn(0, LevelGradients.lastIndex)]
-
-val HeroGradient = listOf(Coral, Magenta, PlumLight)

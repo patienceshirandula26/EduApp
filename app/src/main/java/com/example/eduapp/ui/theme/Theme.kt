@@ -10,57 +10,57 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
-// Generous corners everywhere. This is a game, not a form.
+// Very round. Game buttons are pills, not rectangles.
 private val PicQuizShapes = Shapes(
-    extraSmall = RoundedCornerShape(10.dp),
-    small = RoundedCornerShape(14.dp),
-    medium = RoundedCornerShape(20.dp),
-    large = RoundedCornerShape(28.dp),
-    extraLarge = RoundedCornerShape(36.dp)
+    extraSmall = RoundedCornerShape(12.dp),
+    small = RoundedCornerShape(18.dp),
+    medium = RoundedCornerShape(24.dp),
+    large = RoundedCornerShape(32.dp),
+    extraLarge = RoundedCornerShape(40.dp)
 )
 
 private val LightColors = lightColorScheme(
-    primary = CoralDeep,
+    primary = Grape,
     onPrimary = Color.White,
-    primaryContainer = CreamVariant,
-    onPrimaryContainer = Plum,
-    secondary = Sunshine,
-    onSecondary = Plum,
-    secondaryContainer = SunshineSoft,
-    onSecondaryContainer = Plum,
-    tertiary = Mint,
-    onTertiary = Plum,
-    tertiaryContainer = MintSoft,
-    onTertiaryContainer = Plum,
-    background = CreamBg,
-    onBackground = InkDark,
-    surface = CreamCard,
-    onSurface = InkDark,
-    surfaceVariant = CreamVariant,
-    onSurfaceVariant = InkSoft,
-    outline = Color(0xFFE0C4B8)
+    primaryContainer = CloudVariant,
+    onPrimaryContainer = GrapeNight,
+    secondary = Gold,
+    onSecondary = Midnight,
+    secondaryContainer = GoldLight,
+    onSecondaryContainer = Midnight,
+    tertiary = Teal,
+    onTertiary = Color.White,
+    tertiaryContainer = TealLight,
+    onTertiaryContainer = Midnight,
+    background = Cloud,
+    onBackground = Midnight,
+    surface = CloudCard,
+    onSurface = Midnight,
+    surfaceVariant = CloudVariant,
+    onSurfaceVariant = MidnightSoft,
+    outline = Color(0xFFC4B8F0)
 )
 
 private val DarkColors = darkColorScheme(
-    primary = Coral,
-    onPrimary = Plum,
-    primaryContainer = PlumLight,
+    primary = Color(0xFFA78BFA),
+    onPrimary = GrapeNight,
+    primaryContainer = GrapeDeep,
     onPrimaryContainer = Color.White,
-    secondary = Sunshine,
-    onSecondary = Plum,
-    secondaryContainer = Color(0xFF6B4A1F),
-    onSecondaryContainer = SunshineSoft,
-    tertiary = Mint,
-    onTertiary = Plum,
-    tertiaryContainer = Color(0xFF1B5C48),
-    onTertiaryContainer = MintSoft,
-    background = Plum,
-    onBackground = Color(0xFFF5EDF5),
-    surface = PlumLight,
-    onSurface = Color(0xFFF5EDF5),
-    surfaceVariant = Color(0xFF3D2650),
-    onSurfaceVariant = Color(0xFFD9C4E0),
-    outline = Color(0xFF6B4A7C)
+    secondary = Gold,
+    onSecondary = Midnight,
+    secondaryContainer = Color(0xFF78500A),
+    onSecondaryContainer = GoldLight,
+    tertiary = TealLight,
+    onTertiary = Midnight,
+    tertiaryContainer = Color(0xFF0F766E),
+    onTertiaryContainer = TealLight,
+    background = GrapeNight,
+    onBackground = Color(0xFFEDE9FE),
+    surface = Color(0xFF3B2A6B),
+    onSurface = Color(0xFFEDE9FE),
+    surfaceVariant = Color(0xFF44337A),
+    onSurfaceVariant = Color(0xFFCFC4F5),
+    outline = Color(0xFF7C6BB5)
 )
 
 @Composable
