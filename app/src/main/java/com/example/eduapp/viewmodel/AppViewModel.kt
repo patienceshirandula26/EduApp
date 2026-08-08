@@ -24,10 +24,26 @@ class AppViewModel(
 ) : ViewModel() {
 
     val settings: StateFlow<AppSettings> = userPreferences.settings
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), AppSettings())
+        .stateIn(viewModelScope, SharingStarted.Eagerly, AppSettings())
 
     fun setUsername(name: String) {
         viewModelScope.launch { userPreferences.setUsername(name) }
+    }
+
+    fun setSoundEnabled(enabled: Boolean) {
+        viewModelScope.launch { userPreferences.setSoundEnabled(enabled) }
+    }
+
+    fun setVolume(value: Float) {
+        viewModelScope.launch { userPreferences.setVolume(value) }
+    }
+
+    fun setCountdownEnabled(enabled: Boolean) {
+        viewModelScope.launch { userPreferences.setCountdownEnabled(enabled) }
+    }
+
+    fun signOut() {
+        viewModelScope.launch { userPreferences.signOut() }
     }
 
     fun playCorrectSound() {

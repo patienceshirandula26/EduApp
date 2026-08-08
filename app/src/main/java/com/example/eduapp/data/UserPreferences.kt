@@ -15,7 +15,8 @@ private val Context.dataStore by preferencesDataStore(name = "picquiz_prefs")
 data class AppSettings(
     val username: String = "",
     val soundEnabled: Boolean = true,
-    val volume: Float = 0.7f
+    val volume: Float = 0.7f,
+    val countdownEnabled: Boolean = false
 ) {
     val hasUsername: Boolean get() = username.isNotBlank()
 }
@@ -30,13 +31,15 @@ class UserPreferences(private val context: Context) {
         val USERNAME = stringPreferencesKey("username")
         val SOUND_ENABLED = booleanPreferencesKey("sound_enabled")
         val VOLUME = floatPreferencesKey("volume")
+        val COUNTDOWN = booleanPreferencesKey("countdown_enabled")
     }
 
     val settings: Flow<AppSettings> = context.dataStore.data.map { prefs ->
         AppSettings(
             username = prefs[Keys.USERNAME].orEmpty(),
             soundEnabled = prefs[Keys.SOUND_ENABLED] ?: true,
-            volume = prefs[Keys.VOLUME] ?: 0.7f
+            volume = prefs[Keys.VOLUME] ?: 0.7f,
+            countdownEnabled = prefs[Keys.COUNTDOWN] ?: false
         )
     }
 
@@ -50,5 +53,13 @@ class UserPreferences(private val context: Context) {
 
     suspend fun setVolume(value: Float) {
         context.dataStore.edit { it[Keys.VOLUME] = value.coerceIn(0f, 1f) }
+    }
+
+    suspend fun setCountdownEnabled(value: Boolean) {
+        context.dataStore.edit { it[Keys.COUNTDOWN] = value }
+    }
+
+    suspend fun signOut() {
+        context.dataStore.edit { it.remove(Keys.USERNAME) }
     }
 }
